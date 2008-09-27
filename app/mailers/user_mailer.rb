@@ -1,6 +1,6 @@
-class MerbAuth::UserMailer < Merb::MailController
+class MerbfulAuthentication::UserMailer < Merb::MailController
   
-  controller_for_slice MerbAuth, :templates_for => :mailer, :path => "views"
+  controller_for_slice MerbfulAuthentication, :templates_for => :mailer, :path => "views"
   
   def signup
     @ivar = params[MA[:single_resource]]

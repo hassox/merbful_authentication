@@ -1,4 +1,4 @@
-module MerbAuth
+module MerbfulAuthentication
   module Adapter
     module ActiveRecord
       module Map
@@ -41,4 +41,4 @@ module MerbAuth
       end # Map
     end # ActiveRecord
   end # Adapter
-end # MerbAuthenticaiton
+end # MerbfulAuthenticationenticaiton

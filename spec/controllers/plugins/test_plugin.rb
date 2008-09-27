@@ -1,4 +1,4 @@
-module MerbAuth
+module MerbfulAuthentication
   module Controller
     module Tester
       def self.included(base)

@@ -1,4 +1,4 @@
-module MerbAuth
+module MerbfulAuthentication
   module Adapter
     module DataMapper
       

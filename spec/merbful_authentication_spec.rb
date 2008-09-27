@@ -3,15 +3,16 @@ require 'activerecord'
 require 'dm-core'
 
 # For note purposes
-# Merb::Slices.register_and_load(../../lib/merb-auth.rb)
+# Merb::Slices.register_and_load(../../lib/merbful_authentication.rb)
 
-describe MerbAuth do
+describe MerbfulAuthentication do
   
   before(:all) do
-    @adapter_path = File.dirname(__FILE__) / ".." / "lib" / "merb-auth" / "adapters"
+    @adapter_path = File.expand_path(File.dirname(__FILE__)) / ".." / "lib" / "merbful_authentication" / "adapters"
     @ar_path = @adapter_path / "activerecord"
     @config = Merb::Slices::config[:merb_auth]
     DataMapper.setup(:default, 'sqlite3::memory:')
+    reload_ma!
   end
   
   before(:each) do
@@ -31,18 +32,7 @@ describe MerbAuth do
     end if defined?(MA::Adapter)
   end
   
-  def stub_orm_scope(scope = "datamapper")
-    Merb.stub!(:orm_generator_scope).and_return(scope)
-  end
-  
-  def register_activerecord!
-    MA.register_adapter :activerecord, "#{@adapter_path}/activerecord"
-  end
-  
-  def register_datamapper!
-    MA.register_adapter :datamapper, "#{@adapter_path}/datamapper"
-  end
-  
+
   describe "Adapter Loading" do
   
     it "should allow adapters to register themselves" do
@@ -70,7 +60,7 @@ describe MerbAuth do
     it "should raise an error if an adapter is loaded that has not been registered" do
       lambda do
         MA.load_adapter!(:no_adapter)
-      end.should raise_error(RuntimeError, "MerbAuth: Adapter Not Registered - no_adapter")
+      end.should raise_error(RuntimeError, "MerbfulAuthentication: Adapter Not Registered - no_adapter")
     end
     
     it "should load the adapter scope as the type if there is no specified adapter type" do
@@ -133,8 +123,8 @@ describe MerbAuth do
     it "should overwrite the new method" do
       Object.class_eval <<-EOS
         class User
-          include MerbAuth::Adapter::DataMapper
-          include MerbAuth::Adapter::DataMapper::DefaultModelSetup
+          include MerbfulAuthentication::Adapter::DataMapper
+          include MerbfulAuthentication::Adapter::DataMapper::DefaultModelSetup
         end
         EOS
       controller = dispatch_to(MA::Users, :new)
@@ -147,79 +137,79 @@ describe MerbAuth do
 
 end
 
-describe "MerbAuth (module)" do
+describe "MerbfulAuthentication (module)" do
   
   # Feel free to remove the specs below
   
   it "should be registered in Merb::Slices.slices" do
-    Merb::Slices.slices.should include(MerbAuth)
+    Merb::Slices.slices.should include(MerbfulAuthentication)
   end
   
   it "should have an :identifier property" do
-    MerbAuth.identifier.should == "merb-auth"
+    MerbfulAuthentication.identifier.should == "merbful_authentication"
   end
   
   it "should have an :identifier_sym property" do
-    MerbAuth.identifier_sym.should == :merb_auth
+    MerbfulAuthentication.identifier_sym.should == :merbful_authentication
   end
   
   it "should have a :root property" do
-    MerbAuth.root.should == current_slice_root
-    MerbAuth.root_path('app').should == current_slice_root / 'app'
+    MerbfulAuthentication.root.should == current_slice_root
+    MerbfulAuthentication.root_path('app').should == current_slice_root / 'app'
   end
   
   it "should have metadata properties" do
-    MerbAuth.description.should == "MerbAuth is a Merb slice that provides authentication"
-    MerbAuth.version.should == "0.1.0"
-    MerbAuth.author.should == "Merb Core"
+    MerbfulAuthentication.description.should == "MerbfulAuthentication is a Merb slice that provides authentication"
+    MerbfulAuthentication.version.should == "0.1.0"
+    MerbfulAuthentication.author.should == "Merb Core"
   end
   
   it "should have a config property (Hash)" do
-    MerbAuth.config.should be_kind_of(Hash)
+    MerbfulAuthentication.config.should be_kind_of(Hash)
   end
   
   it "should have a :layout config option set" do
-    MerbAuth.config[:layout].should == :merb_auth
+    MerbfulAuthentication.config[:layout].should == :merbful_authentication
   end
   
   it "should have a dir_for method" do
-    app_path = MerbAuth.dir_for(:application)
+    app_path = MerbfulAuthentication.dir_for(:application)
     app_path.should == current_slice_root / 'app'
     [:view, :model, :controller, :helper, :mailer, :part].each do |type|
-      MerbAuth.dir_for(type).should == app_path / "#{type}s"
+      MerbfulAuthentication.dir_for(type).should == app_path / "#{type}s"
     end
-    public_path = MerbAuth.dir_for(:public)
+    public_path = MerbfulAuthentication.dir_for(:public)
     public_path.should == current_slice_root / 'public'
     [:stylesheet, :javascript, :image].each do |type|
-      MerbAuth.dir_for(type).should == public_path / "#{type}s"
+      MerbfulAuthentication.dir_for(type).should == public_path / "#{type}s"
     end
   end
   
   it "should have a app_dir_for method" do
-    root_path = MerbAuth.app_dir_for(:root)
-    root_path.should == Merb.root / 'slices' / 'merb-auth'
-    app_path = MerbAuth.app_dir_for(:application)
+    root_path = MerbfulAuthentication.app_dir_for(:root)
+    root_path.should == Merb.root / 'slices' / 'merbful_authentication'
+    app_path = MerbfulAuthentication.app_dir_for(:application)
     app_path.should == root_path / 'app'
     [:view, :model, :controller, :helper, :mailer, :part].each do |type|
-      MerbAuth.app_dir_for(type).should == app_path / "#{type}s"
+      MerbfulAuthentication.app_dir_for(type).should == app_path / "#{type}s"
     end
-    public_path = MerbAuth.app_dir_for(:public)
-    public_path.should == Merb.dir_for(:public) / 'slices' / 'merb-auth'
+    public_path = MerbfulAuthentication.app_dir_for(:public)
+    public_path.should == Merb.dir_for(:public) / 'slices' / 'merbful_authentication'
     [:stylesheet, :javascript, :image].each do |type|
-      MerbAuth.app_dir_for(type).should == public_path / "#{type}s"
+      MerbfulAuthentication.app_dir_for(type).should == public_path / "#{type}s"
     end
   end
   
   it "should have a public_dir_for method" do
-    public_path = MerbAuth.public_dir_for(:public)
-    public_path.should == '/slices' / 'merb-auth'
+    public_path = MerbfulAuthentication.public_dir_for(:public)
+    public_path.should == '/slices' / 'merbful_authentication'
     [:stylesheet, :javascript, :image].each do |type|
-      MerbAuth.public_dir_for(type).should == public_path / "#{type}s"
+      MerbfulAuthentication.public_dir_for(type).should == public_path / "#{type}s"
     end
   end
   
   it "should keep a list of path component types to use when copying files" do
-    (MerbAuth.mirrored_components & MerbAuth.slice_paths.keys).length.should == MerbAuth.mirrored_components.length
+    (MerbfulAuthentication.mirrored_components & MerbfulAuthentication.slice_paths.keys).length.should == MerbfulAuthentication.mirrored_components.length
   end
   
 end

@@ -29,7 +29,7 @@ class MaMigrationGenerator < Merb::GeneratorBase
     protected
       def banner
         <<-EOS
-  Creates a migration for merb-auth user model
+  Creates a migration for merbful_authentication user model
 
   USAGE: #{$0} #{spec.name} name"
   EOS

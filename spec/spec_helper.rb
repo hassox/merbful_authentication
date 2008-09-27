@@ -13,13 +13,13 @@ require 'merb-mailer'
 #     Merb::Config.use do |c|
 #       c[:session_store] = "memory"
 #     end
-#     Merb::Slices.register_and_load(File.join(File.dirname(__FILE__), '..', 'lib', 'merb-auth.rb'))
+#     Merb::Slices.register_and_load(File.join(File.dirname(__FILE__), '..', 'lib', 'merbful_authentication.rb'))
 #   end
 #   
 # end
 
 Merb::Plugins.config[:merb_slices][:auto_register] = true
-Merb::Plugins.config[:merb_slices][:search_path]   = File.join(File.dirname(__FILE__), '..', 'lib', 'merb-auth.rb')
+Merb::Plugins.config[:merb_slices][:search_path]   = File.join(File.dirname(__FILE__), '..', 'lib', 'merbful_authentication.rb')
 
 module Merb
   def self.orm_generator_scope
@@ -78,23 +78,39 @@ Spec::Runner.configure do |config|
   config.include(Merb::Test::ControllerHelper)
   config.include(Merb::Test::SliceHelper)
   config.include(ValidModelHashes)
-  config.before(:each) do
-    Merb::Router.prepare { |r| r.add_slice(:MerbAuth) } if standalone?
-  end
+  # config.before(:each) do
+  #   Merb::Router.prepare { add_slice(:MerbfulAuthentication, :default_routes => false) } if standalone?
+  # end
+  # config.after(:each) do
+  #   Merb::Router.reset!
+  # end
+end
+
+def stub_orm_scope(scope = "datamapper")
+  Merb.stub!(:orm_generator_scope).and_return(scope)
+end
+
+def register_activerecord!
+  MA.register_adapter :activerecord, "#{File.expand_path(File.dirname(__FILE__)) / ".." / "lib" / "merbful_authentication" / "adapters" / "activerecord"}"
+end
+
+def register_datamapper!
+  MA.register_adapter :datamapper, "#{File.expand_path(File.dirname(__FILE__)) / ".." / "lib" / "merbful_authentication" / "adapters" / "datamapper"}"
 end
 
 
-# GLobal helpers for merb-auth
+# GLobal helpers for merbful_authentication
 def reload_ma!(create_class = nil)
   Object.class_eval do
     remove_const("User") if defined?(User)
     remove_const("MA") if defined?(MA)
-    remove_const("MerbAuth")
+    remove_const("MerbfulAuthentication")
   end
-  load File.join(File.dirname(__FILE__), "..", "lib", "merb-auth.rb")
+  load File.join(File.dirname(__FILE__), "..", "lib", "merbful_authentication.rb")
   register_datamapper!
   stub_orm_scope
-
+  Merb::Router.reset!
+  Merb::Router.prepare { add_slice(:MerbfulAuthentication, :default_routes => false) } if standalone?
   MA.load_slice
   yield if block_given?
   MA[:user] = nil
@@ -104,11 +120,12 @@ def reload_ma!(create_class = nil)
     Object.class_eval <<-EOS
       class #{create_class}
         include DataMapper::Resource
-        include MerbAuth::Adapter::DataMapper
-        include MerbAuth::Adapter::DataMapper::DefaultModelSetup
+        include MerbfulAuthentication::Adapter::DataMapper
+        include MerbfulAuthentication::Adapter::DataMapper::DefaultModelSetup
       end
       EOS
   end 
   Merb::BootLoader::MaLoadPlugins.run
   MA.activate
+  
 end

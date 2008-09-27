@@ -1,4 +1,4 @@
-module MerbAuth
+module MerbfulAuthentication
   module Adapter
     module ActiveRecord
       
@@ -78,4 +78,4 @@ module MerbAuth
       
     end # ActiveRecord
   end # Adapter
-end # MerbAuth
+end # MerbfulAuthentication

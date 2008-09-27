@@ -1,7 +1,7 @@
-module MerbAuth
+module MerbfulAuthentication
   class Passwords < Application
   
-    controller_for_slice :MerbAuth
+    controller_for_slice :MerbfulAuthentication
       
     def _template_location(context, type = nil, controller = controller_name)
       if controller.nil? || controller != "merb_auth/passwords"

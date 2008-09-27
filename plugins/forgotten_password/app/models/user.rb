@@ -1,4 +1,4 @@
-module MerbAuth
+module MerbfulAuthentication
   module ForgottenPassword
     module Model
       
@@ -49,4 +49,4 @@ module MerbAuth
   end
 end
 
-MA[:user].send(:include, MerbAuth::ForgottenPassword::Model)
+MA[:user].send(:include, MerbfulAuthentication::ForgottenPassword::Model)

@@ -3,19 +3,20 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe MA::UserMailer do
   
   before(:all) do
+    reload_ma!
     MA[:use_activation] = true
     
     DataMapper.setup(:default, 'sqlite3::memory:')
     Merb.stub!(:orm_generator_scope).and_return("datamapper")
     
-    adapter_path = File.join( File.dirname(__FILE__), "..", "..", "lib", "merb-auth", "adapters")
+    adapter_path = File.join( File.dirname(__FILE__), "..", "..", "lib", "merbful_authentication", "adapters")
     MA.register_adapter :datamapper, "#{adapter_path}/datamapper"
     MA.register_adapter :activerecord, "#{adapter_path}/activerecord"    
     MA.loaded
 
     class User
       include MA::Adapter::DataMapper
-      include MerbAuth::Adapter::DataMapper::DefaultModelSetup
+      include MerbfulAuthentication::Adapter::DataMapper::DefaultModelSetup
     end
   end
   
@@ -52,7 +53,7 @@ describe MA::UserMailer do
   
   it "should mention the activation link in the signup emails" do
     deliver(:signup, @mailer_params, :user => @u)
-    the_url = MA::UserMailer.new.url(:user_activation, :activation_code => @u.activation_code)
+    the_url = MA::UserMailer.new.url(:merbful_authentication_user_activation, :activation_code => @u.activation_code)
     the_url.should_not be_nil
     @delivery.text.should include( the_url )   
   end

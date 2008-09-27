@@ -5,12 +5,12 @@ require 'merb-core/version'
 require 'merb-core/test/tasks/spectasks'
 require 'merb-core/tasks/merb_rake_helper'
 
-NAME = "merb-auth"
-AUTHOR = "Merb Core"
+NAME = "merbful_authentication"
+AUTHOR = "Daniel Neighman"
 EMAIL = "has.sox@gmail.com"
 HOMEPAGE = "http://merbivore.com/"
 SUMMARY = "Merb Slice that provides authentication"
-GEM_VERSION = "0.1.0"
+GEM_VERSION = "0.10.0"
 
 spec = Gem::Specification.new do |s|
   s.rubyforge_project = 'merb'
@@ -35,7 +35,7 @@ Rake::GemPackageTask.new(spec) do |pkg|
   pkg.gem_spec = spec
 end
 
-desc "Install MerbAuth as a gem"
+desc "Install MerbfulAuthentication as a gem"
 task :install => [:package] do
   sh %{#{sudo} gem install pkg/#{NAME}-#{GEM_VERSION} --no-update-sources}
 end

@@ -7,7 +7,7 @@ describe "MA User Model" do
     DataMapper.setup(:default, 'sqlite3::memory:')
     Merb.stub!(:orm_generator_scope).and_return("datamapper")
     
-    adapter_path = File.join( File.dirname(__FILE__), "..", "..", "lib", "merb-auth", "adapters")
+    adapter_path = File.join( File.dirname(__FILE__), "..", "..", "lib", "merbful_authentication", "adapters")
     MA.register_adapter :datamapper, "#{adapter_path}/datamapper"
     MA.register_adapter :activerecord, "#{adapter_path}/activerecord"    
     MA.loaded
@@ -18,6 +18,6 @@ describe "MA User Model" do
     end
   end
   
-  it_should_behave_like "A MerbAuth User Model"
+  it_should_behave_like "A MerbfulAuthentication User Model"
 
 end

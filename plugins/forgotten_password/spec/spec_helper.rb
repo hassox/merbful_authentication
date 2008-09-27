@@ -20,7 +20,7 @@ end
   
 
 DataMapper.setup(:default, 'sqlite3::memory:')
-adapter_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "lib", "merb-auth", "adapters"))
+adapter_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "lib", "merbful_authentication", "adapters"))
 MA.register_adapter :datamapper, "#{adapter_path}/datamapper"
 MA.register_adapter :activerecord, "#{adapter_path}/activerecord"    
 MA.load_slice
@@ -31,6 +31,6 @@ end
 
 User.auto_migrate!
 MA.activate
-Merb::Router.prepare{|r| r.add_slice(:MerbAuth)}
+Merb::Router.prepare{|r| r.add_slice(:MerbfulAuthentication)}
 MA.load_plugins!
 

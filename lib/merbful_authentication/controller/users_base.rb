@@ -1,4 +1,4 @@
-module MerbAuth
+module MerbfulAuthentication
   module Controller
     
     # Provides basic functionality for the users controller.  Allows creation of a new user and activation
@@ -52,4 +52,4 @@ module MerbAuth
       
     end # UsersBase
   end # Controllers
-end #MerbAuth
+end #MerbfulAuthentication

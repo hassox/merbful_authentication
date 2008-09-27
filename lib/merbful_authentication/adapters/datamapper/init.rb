@@ -14,7 +14,7 @@ if Merb.env?(:test)
     end  
   end
   MA[:user] = nil
-  MerbAuth.module_eval do
+  MerbfulAuthentication.module_eval do
     remove_const("Adapter") if defined?(Adapter)
   end
   load path / ".." / "common.rb"

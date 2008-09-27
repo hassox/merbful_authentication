@@ -7,7 +7,7 @@ describe "MA ActiveRecord User Model" do
     
     Merb.stub!(:orm_generator_scope).and_return("activerecord")
     
-    adapter_path = File.join( File.dirname(__FILE__), "..", "..", "lib", "merb-auth", "adapters")
+    adapter_path = File.join( File.dirname(__FILE__), "..", "..", "lib", "merbful_authentication", "adapters")
     MA.register_adapter :datamapper, "#{adapter_path}/datamapper"
     MA.register_adapter :activerecord, "#{adapter_path}/activerecord"    
     MA.loaded
@@ -38,13 +38,13 @@ describe "MA ActiveRecord User Model" do
     UserMigration.up
     
     class User < ActiveRecord::Base
-      include MerbAuth::Adapter::ActiveRecord
-      include MerbAuth::Adapter::ActiveRecord::DefaultModelSetup
+      include MerbfulAuthentication::Adapter::ActiveRecord
+      include MerbfulAuthentication::Adapter::ActiveRecord::DefaultModelSetup
     end
     
     MA.activate
   end
   
-  it_should_behave_like "A MerbAuth User Model"
+  it_should_behave_like "A MerbfulAuthentication User Model"
 
 end

@@ -25,7 +25,7 @@ namespace :slices do
         out =<<-EOS
         
 # -------------------------------------------------------------------
-  include MerbAuth::Adapter::ActiveRecord
+  include MerbfulAuthentication::Adapter::ActiveRecord
 
   # Virtual attribute for the unencrypted password
   attr_accessor :password, :password_confirmation
@@ -46,9 +46,9 @@ namespace :slices do
   after_create :send_signup_notification
 # -------------------------------------------------------------------
 EOS
-        puts "Enter this into your model to make it usable with MerbAuth by default"
+        puts "Enter this into your model to make it usable with MerbfulAuthentication by default"
         puts out
-        puts "Enter this into your model to make it usable with MerbAuth by default"
+        puts "Enter this into your model to make it usable with MerbfulAuthentication by default"
       end
       
     end # ar
@@ -60,7 +60,7 @@ EOS
 
 # -------------------------------------------------------------------
 
-  include MerbAuth::Adapter::DataMapper
+  include MerbfulAuthentication::Adapter::DataMapper
   
   attr_accessor :password, :password_confirmation
 
@@ -91,9 +91,9 @@ EOS
   
   # -------------------------------------------------------------------
   EOS
-          puts "Enter this into your model to make it usable with MerbAuth by default"
+          puts "Enter this into your model to make it usable with MerbfulAuthentication by default"
           puts out
-          puts "Enter this into your model to make it usable with MerbAuth by default"
+          puts "Enter this into your model to make it usable with MerbfulAuthentication by default"
   
       end # setup
     end # dm
